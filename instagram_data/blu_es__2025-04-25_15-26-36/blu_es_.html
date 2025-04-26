@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset='UTF-8'>
+<title>Instagram Data for @blu_es_</title>
+<style>
+/* Dark theme with specified color palette */
+/* Colors: #9d4edd, #c77dff, #ff9e00, #ddff00, #9d4edd */
+:root {
+  --bg-color: #111420;
+  --card-bg: #1e2132;
+  --text-color: #f5f5f5;
+  --primary: #9d4edd;
+  --secondary: #c77dff;
+  --accent1: #ff9e00;
+  --accent2: #ddff00;
+  --muted-text: #a0a0a0;
+  --border-color: #333648;
+}
+body { font-family: 'Segoe UI', Roboto, Arial, sans-serif; margin: 0; padding: 0; background-color: var(--bg-color); color: var(--text-color); }
+.container { max-width: 1200px; margin: 20px auto; background: var(--card-bg); border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.2); padding: 25px; }
+h1 { color: var(--primary); margin-bottom: 20px; text-align: center; }
+table { width: 100%; border-collapse: collapse; margin-bottom: 20px; border-radius: 8px; overflow: hidden; }
+th, td { padding: 15px; text-align: left; border-bottom: 1px solid var(--border-color); }
+th { background-color: var(--primary); color: white; font-weight: 600; position: sticky; top: 0; }
+tr:hover { background-color: rgba(157, 78, 221, 0.1); transition: all 0.2s; }
+.caption { max-width: 400px; }
+.stats { display: flex; margin-bottom: 30px; gap: 20px; flex-wrap: wrap; }
+.stat-block { flex: 1; background: var(--card-bg); padding: 20px; border-radius: 12px; text-align: center; border: 1px solid var(--primary); box-shadow: 0 4px 12px rgba(157, 78, 221, 0.2); transition: transform 0.3s, box-shadow 0.3s; }
+.stat-block:hover { transform: translateY(-5px); box-shadow: 0 8px 15px rgba(157, 78, 221, 0.3); }
+.stat-value { font-size: 28px; font-weight: bold; color: var(--accent1); margin-bottom: 10px; }
+.stat-label { font-size: 16px; color: var(--text-color); }
+.tabs { display: flex; margin-bottom: 20px; border-bottom: 1px solid var(--border-color); gap: 10px; }
+.tab { padding: 12px 25px; cursor: pointer; background: none; border: none; font-size: 16px; color: var(--text-color); border-radius: 8px 8px 0 0; transition: all 0.3s; }
+.tab:hover { background-color: rgba(157, 78, 221, 0.2); }
+.tab.active { color: white; background-color: var(--primary); }
+.tab-content { display: none; animation: fadeEffect 0.5s; }
+@keyframes fadeEffect { from {opacity: 0;} to {opacity: 1;} }
+.tab-content.active { display: block; }
+.search-container { margin-bottom: 25px; position: relative; }
+.search-container input { width: 100%; padding: 14px 20px; font-size: 16px; border: 2px solid var(--border-color); border-radius: 8px; background: var(--card-bg); color: var(--text-color); box-sizing: border-box; transition: all 0.3s; }
+.search-container input:focus { outline: none; border-color: var(--secondary); box-shadow: 0 0 0 3px rgba(199, 125, 255, 0.25); }
+.search-container input::placeholder { color: var(--muted-text); }
+.search-container::after { content: '🔍'; position: absolute; right: 15px; top: 50%; transform: translateY(-50%); color: var(--muted-text); font-size: 18px; }
+.list-view { display: flex; flex-direction: column; gap: 20px; }
+.list-item { border: 1px solid var(--border-color); border-radius: 12px; padding: 20px; background: var(--card-bg); transition: all 0.3s; }
+.list-item:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0,0,0,0.15); border-color: var(--secondary); }
+.list-caption { margin-bottom: 15px; line-height: 1.5; }
+.list-meta { display: flex; flex-wrap: wrap; justify-content: space-between; color: var(--muted-text); font-size: 14px; gap: 10px; }
+.list-meta span, .list-meta a { margin-right: 10px; }
+a { color: var(--accent1); text-decoration: none; transition: color 0.2s; }
+a:hover { color: var(--accent2); text-decoration: none; }
+.tag { display: inline-block; background: var(--primary); color: white; font-size: 12px; padding: 4px 8px; border-radius: 4px; margin-right: 5px; }
+.likes-comments { display: flex; gap: 15px; }
+.likes-comments span { display: flex; align-items: center; }
+.likes-comments span svg { margin-right: 5px; }
+/* Scrollbar styling */
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: var(--card-bg); }
+::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 5px; }
+::-webkit-scrollbar-thumb:hover { background: var(--secondary); }
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .container { margin: 10px; padding: 15px; }
+  .stats { flex-direction: column; }
+  .tab { padding: 10px 15px; font-size: 14px; }
+  .list-meta { flex-direction: column; }
+}
+</style>
+<script>
+function openTab(evt, tabName) {
+  const tabcontent = document.getElementsByClassName('tab-content');
+  for (let i = 0; i < tabcontent.length; i++) {
+    tabcontent[i].style.display = 'none';
+  }
+  const tablinks = document.getElementsByClassName('tab');
+  for (let i = 0; i < tablinks.length; i++) {
+    tablinks[i].className = tablinks[i].className.replace(' active', '');
+  }
+  document.getElementById(tabName).style.display = 'block';
+  evt.currentTarget.className += ' active';
+  // Save the active tab to localStorage
+  localStorage.setItem('activeInstagramTab', tabName);
+}
+
+function searchTable() {
+  const input = document.getElementById('table-search');
+  const filter = input.value.toUpperCase();
+  const table = document.getElementById('post-table');
+  const tr = table.getElementsByTagName('tr');
+
+  for (let i = 1; i < tr.length; i++) {
+    let found = false;
+    const td = tr[i].getElementsByTagName('td');
+    for (let j = 0; j < td.length; j++) {
+      if (td[j]) {
+        const txtValue = td[j].textContent || td[j].innerText;
+        if (txtValue.toUpperCase().indexOf(filter) > -1) {
+          found = true;
+          break;
+        }
+      }
+    }
+    tr[i].style.display = found ? '' : 'none';
+  }
+}
+
+function searchList() {
+  const input = document.getElementById('list-search');
+  const filter = input.value.toUpperCase();
+  const items = document.getElementsByClassName('list-item');
+
+  for (let i = 0; i < items.length; i++) {
+    const content = items[i].textContent || items[i].innerText;
+    items[i].style.display = content.toUpperCase().indexOf(filter) > -1 ? '' : 'none';
+  }
+}
+
+window.onload = function() {
+  // Check if there's a saved tab preference
+  const activeTab = localStorage.getItem('activeInstagramTab') || 'table-view';
+  // Find the tab button for the saved tab and click it
+  const tabs = document.getElementsByClassName('tab');
+  for (let i = 0; i < tabs.length; i++) {
+    if (tabs[i].getAttribute('data-tab') === activeTab) {
+      tabs[i].click();
+      break;
+    }
+  }
+  // If no matching tab found, click the first one
+  if (!document.querySelector('.tab.active')) {
+    document.querySelector('.tab').click();
+  }
+};
+</script>
+</head>
+<body>
+<div class='container'>
+<h1>Instagram Data for @blu_es_</h1>
+
+<!-- Statistics -->
+<div class='stats'>
+  <div class='stat-block'><div class='stat-value'>17</div><div class='stat-label'>Posts</div></div>
+  <div class='stat-block'><div class='stat-value'>1,326</div><div class='stat-label'>Total Likes</div></div>
+  <div class='stat-block'><div class='stat-value'>211</div><div class='stat-label'>Total Comments</div></div>
+</div>
+
+<!-- Tabs -->
+<div class='tabs'>
+  <button class='tab' data-tab='table-view' onclick="openTab(event, 'table-view')">Table View</button>
+  <button class='tab' data-tab='list-view' onclick="openTab(event, 'list-view')">List View</button>
+</div>
+
+<!-- Table View -->
+<div id='table-view' class='tab-content'>
+  <div class='search-container'>
+    <input type='text' id='table-search' onkeyup="searchTable()" placeholder='Search posts...'>
+  </div>
+  <div style='overflow-x: auto; max-height: 70vh; overflow-y: auto;'>
+  <table id='post-table'>
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Caption</th>
+        <th>Likes</th>
+        <th>Comments</th>
+        <th>Date</th>
+        <th>Username</th>
+        <th>Link</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Sidecar</td>
+        <td class='caption'>07.03.2025.
+The day I turned 20.
+I am so grateful to have the people around me, always supporting and cheering me,these past few months have taught me...</td>
+        <td>82</td>
+        <td>14</td>
+        <td>2025-03-07 09:52</td>
+        <td><a href='https://instagram.com/blu_es_/' target='_blank'>@blu_es_</a></td>
+        <td><a href='https://www.instagram.com/p/DG5M3-qBOq6/' target='_blank'>View</a></td>
+      </tr>
+      <tr>
+        <td>Sidecar</td>
+        <td class='caption'>Models....are we??
+When the assignment goes ✅</td>
+        <td>112</td>
+        <td>26</td>
+        <td>2024-10-08 18:32</td>
+        <td><a href='https://instagram.com/blu_es_/' target='_blank'>@blu_es_</a></td>
+        <td><a href='https://www.instagram.com/p/DA35KuhS8-V/' target='_blank'>View</a></td>
+      </tr>
+      <tr>
+        <td>Sidecar</td>
+        <td class='caption'>When the sun finally shows up 😃👍</td>
+        <td>74</td>
+        <td>9</td>
+        <td>2024-11-17 10:55</td>
+        <td><a href='https://instagram.com/blu_es_/' target='_blank'>@blu_es_</a></td>
+        <td><a href='https://www.instagram.com/p/DCeEndlyO5l/' target='_blank'>View</a></td>
+      </tr>
+      <tr>
+        <td>Sidecar</td>
+        <td class='caption'>yesterday's dump :P
+pretty in sareee✨✨
+hehe</td>
+        <td>88</td>
+        <td>24</td>
+        <td>2025-02-03 05:55</td>
+        <td><a href='https://instagram.com/blu_es_/' target='_blank'>@blu_es_</a></td>
+        <td><a href='https://www.instagram.com/p/DFmYUR_hXDP/' target='_blank'>View</a></td>
+      </tr>
+      <tr>
+        <td>Sidecar</td>
+        <td class='caption'>Blooming blossoms 🌸</td>
+        <td>85</td>
+        <td>11</td>
+        <td>2025-03-21 18:52</td>
+        <td><a href='https://instagram.com/blu_es_/' target='_blank'>@blu_es_</a></td>
+        <td><a href='https://www.instagram.com/p/DHeN2ULBGKZ/' target='_blank'>View</a></td>
+      </tr>
+      <tr>
+        <td>Sidecar</td>
+        <td class='caption'>08.03.2025
+एक दीन अपने पसंदीदा लोगो के संग ♡</td>
+        <td>76</td>
+        <td>12</td>
+        <td>2025-03-08 18:18</td>
+        <td><a href='https://instagram.com/blu_es_/' target='_blank'>@blu_es_</a></td>
+        <td><a href='https://www.instagram.com/p/DG8rmjvBc2e/' target='_blank'>View</a></td>
+      </tr>
+      <tr>
+        <td>Sidecar</td>
+        <td class='caption'>model :&gt; Ishaa Gorai🩵(@blu_es_ )
+
+#shotoni̇phone
+edited using @lightroom</td>
+        <td>74</td>
+        <td>16</td>
+        <td>2025-04-20 20:50</td>
+        <td><a href='https://instagram.com/mosambi.jpg/' target='_blank'>@mosambi.jpg</a></td>
+        <td><a href='https://www.instagram.com/p/DIrrIOyzKFg/' target='_blank'>View</a></td>
+      </tr>
+      <tr>
+        <td>Sidecar</td>
+        <td class='caption'>So much happened.......
+Enjoying every bit of it :D</td>
+        <td>81</td>
+        <td>1</td>
+        <td>2024-09-27 10:24</td>
+        <td><a href='https://instagram.com/blu_es_/' target='_blank'>@blu_es_</a></td>
+        <td><a href='https://www.instagram.com/p/DAasmkbS89O/' target='_blank'>View</a></td>
+      </tr>
+      <tr>
+        <td>Sidecar</td>
+        <td class='caption'>What a Lovely Day Out it was!!! 🎨 🖌️
+Soooö much Fun :D
+(It was burning tho throughout the day ಥ⁠‿⁠ಥ)</td>
+        <td>76</td>
+        <td>10</td>
+        <td>2024-08-19 18:08</td>
+        <td><a href='https://instagram.com/blu_es_/' target='_blank'>@blu_es_</a></td>
+        <td><a href='https://www.instagram.com/p/C-3GpZ8y_Mm/' target='_blank'>View</a></td>
+      </tr>
+      <tr>
+        <td>Sidecar</td>
+        <td class='caption'>जन्माष्टमी का दिन 🌸🦚 !!
+.
+.
+.
+.
+.
+
+Thank youuu sweetie for such amazing pics 🙈 @addy_kini_</td>
+        <td>73</td>
+        <td>8</td>
+        <td>2024-08-26 17:41</td>
+        <td><a href='https://instagram.com/blu_es_/' target='_blank'>@blu_es_</a></td>
+        <td><a href='https://www.instagram.com/p/C_JFGnEyqo_/' target='_blank'>View</a></td>
+      </tr>
+      <tr>
+        <td>Sidecar</td>
+        <td class='caption'>Some Sketches over the time 🎨🖌️
+
+╰⁠(⁠⸝⁠⸝⁠⸝⁠´⁠꒳⁠`⁠⸝⁠⸝⁠⸝⁠)⁠╯</td>
+        <td>65</td>
+        <td>9</td>
+        <td>2024-02-22 06:16</td>
+        <td><a href='https://instagram.com/blu_es_/' target='_blank'>@blu_es_</a></td>
+        <td><a href='https://www.instagram.com/p/C3o69mTSy9Q/' target='_blank'>View</a></td>
+      </tr>
+      <tr>
+        <td>Sidecar</td>
+        <td class='caption'>Reminiscing good old days in this scorching Heat💔
+.
+.
+.</td>
+        <td>61</td>
+        <td>4</td>
+        <td>2024-04-27 14:36</td>
+        <td><a href='https://instagram.com/blu_es_/' target='_blank'>@blu_es_</a></td>
+        <td><a href='https://www.instagram.com/p/C6RL1dZSjVO/' target='_blank'>View</a></td>
+      </tr>
+      <tr>
+        <td>Sidecar</td>
+        <td class='caption'>Felt pretty🌸🌷🌱
+.
+.
+.(enough for posting lol) 
+.
+.
+.
+ (⁠ ⁠ꈍ⁠ᴗ⁠ꈍ⁠)</td>
+        <td>89</td>
+        <td>14</td>
+        <td>2024-02-13 04:16</td>
+        <td><a href='https://instagram.com/blu_es_/' target='_blank'>@blu_es_</a></td>
+        <td><a href='https://www.instagram.com/p/C3RiA1ZS1Rp/' target='_blank'>View</a></td>
+      </tr>
+      <tr>
+        <td>Image</td>
+        <td class='caption'>Started doodling with Lamp shade🏮 
+.
+.
+Ended up doing something inspired by studio Ghibli stills 🏞️
+.
+.
+.
+.
+.
+.
+#artwork #ghiblistudio #dailyart</td>
+        <td>51</td>
+        <td>5</td>
+        <td>2023-08-25 08:59</td>
+        <td><a href='https://instagram.com/blu_es_/' target='_blank'>@blu_es_</a></td>
+        <td><a href='https://www.instagram.com/p/CwXJn3iyJNz/' target='_blank'>View</a></td>
+      </tr>
+      <tr>
+        <td>Sidecar</td>
+        <td class='caption'>27.02.2025 ❄️🌨️
+The day which turned into a core memory..!!
+With the closest people of mine ♡ ♡
+.
+.
+.
+.
+All captured by this pookie @why.so.craky</td>
+        <td>70</td>
+        <td>8</td>
+        <td>2025-02-28 04:16</td>
+        <td><a href='https://instagram.com/blu_es_/' target='_blank'>@blu_es_</a></td>
+        <td><a href='https://www.instagram.com/p/DGmk8IfhbuM/' target='_blank'>View</a></td>
+      </tr>
+      <tr>
+        <td>Sidecar</td>
+        <td class='caption'>Absolutely in love with these Photos 😭🙌
+THE SKY LOOKS SO PERFECT</td>
+        <td>79</td>
+        <td>22</td>
+        <td>2024-08-07 16:10</td>
+        <td><a href='https://instagram.com/blu_es_/' target='_blank'>@blu_es_</a></td>
+        <td><a href='https://www.instagram.com/p/C-X_r6kS_xL/' target='_blank'>View</a></td>
+      </tr>
+      <tr>
+        <td>Sidecar</td>
+        <td class='caption'>13.04.2025
+Yesterday's dump !!!!!!!!
+Tulips season so worth it 🌷☀️
+My pookies are the best&lt;3</td>
+        <td>90</td>
+        <td>18</td>
+        <td>2025-04-14 07:59</td>
+        <td><a href='https://instagram.com/blu_es_/' target='_blank'>@blu_es_</a></td>
+        <td><a href='https://www.instagram.com/p/DIa2KObBzUg/' target='_blank'>View</a></td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+</div>
+<div id='list-view' class='tab-content'>
+  <div class='search-container'>
+    <input type='text' id='list-search' onkeyup="searchList()" placeholder='Search posts...'>
+  </div>
+  <div class='list-view'>
+    <div class='list-item'>
+      <span class='tag'>Sidecar</span>
+      <div class='list-caption'>model :&gt; Ishaa Gorai🩵(@blu_es_ )
+
+#shotoni̇phone
+edited using @lightroom</div>
+      <div class='list-meta'>
+        <div class='likes-comments'>
+          <span><svg width='16' height='16' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'><path d='M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z' fill='var(--accent1)'/></svg> 74</span>
+          <span><svg width='16' height='16' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'><path d='M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v10z' fill='var(--secondary)'/></svg> 16</span>
+        </div>
+        <span>2025-04-20 20:50</span>
+        <a href='https://instagram.com/mosambi.jpg/' target='_blank'>@mosambi.jpg</a>
+        <a href='https://www.instagram.com/p/DIrrIOyzKFg/' target='_blank'>View on Instagram</a>
+      </div>
+    </div>
+    <div class='list-item'>
+      <span class='tag'>Sidecar</span>
+      <div class='list-caption'>13.04.2025
+Yesterday's dump !!!!!!!!
+Tulips season so worth it 🌷☀️
+My pookies are the best&lt;3</div>
+      <div class='list-meta'>
+        <div class='likes-comments'>
+          <span><svg width='16' height='16' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'><path d='M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z' fill='var(--accent1)'/></svg> 90</span>
+          <span><svg width='16' height='16' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'><path d='M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v10z' fill='var(--secondary)'/></svg> 18</span>
+        </div>
+        <span>2025-04-14 07:59</span>
+        <a href='https://instagram.com/blu_es_/' target='_blank'>@blu_es_</a>
+        <a href='https://www.instagram.com/p/DIa2KObBzUg/' target='_blank'>View on Instagram</a>
+      </div>
+    </div>
+    <div class='list-item'>
+      <span class='tag'>Sidecar</span>
+      <div class='list-caption'>Blooming blossoms 🌸</div>
+      <div class='list-meta'>
+        <div class='likes-comments'>
+          <span><svg width='16' height='16' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'><path d='M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z' fill='var(--accent1)'/></svg> 85</span>
+          <span><svg width='16' height='16' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'><path d='M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v10z' fill='var(--secondary)'/></svg> 11</span>
+        </div>
+        <span>2025-03-21 18:52</span>
+        <a href='https://instagram.com/blu_es_/' target='_blank'>@blu_es_</a>
+        <a href='https://www.instagram.com/p/DHeN2ULBGKZ/' target='_blank'>View on Instagram</a>
+      </div>
+    </div>
+    <div class='list-item'>
+      <span class='tag'>Sidecar</span>
+      <div class='list-caption'>08.03.2025
+एक दीन अपने पसंदीदा लोगो के संग ♡</div>
+      <div class='list-meta'>
+        <div class='likes-comments'>
+          <span><svg width='16' height='16' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'><path d='M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z' fill='var(--accent1)'/></svg> 76</span>
+          <span><svg width='16' height='16' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'><path d='M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v10z' fill='var(--secondary)'/></svg> 12</span>
+        </div>
+        <span>2025-03-08 18:18</span>
+        <a href='https://instagram.com/blu_es_/' target='_blank'>@blu_es_</a>
+        <a href='https://www.instagram.com/p/DG8rmjvBc2e/' target='_blank'>View on Instagram</a>
+      </div>
+    </div>
+    <div class='list-item'>
+      <span class='tag'>Sidecar</span>
+      <div class='list-caption'>07.03.2025.
+The day I turned 20.
+I am so grateful to have the people around me, always supporting and cheering me,these past few months have taught me a lot,A LOT, the incredible growth I have been through, the INCREDIBLE AMOUNT of LOVE I have received 😭😭😭💕.
+All these make the 20th year incredibly more special to me and
+ Growing into an adult?Yes.
+ Will forever cherish these memories of mine!!!!!</div>
+      <div class='list-meta'>
+        <div class='likes-comments'>
+          <span><svg width='16' height='16' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'><path d='M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z' fill='var(--accent1)'/></svg> 82</span>
+          <span><svg width='16' height='16' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'><path d='M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v10z' fill='var(--secondary)'/></svg> 14</span>
+        </div>
+        <span>2025-03-07 09:52</span>
+        <a href='https://instagram.com/blu_es_/' target='_blank'>@blu_es_</a>
+        <a href='https://www.instagram.com/p/DG5M3-qBOq6/' target='_blank'>View on Instagram</a>
+      </div>
+    </div>
+    <div class='list-item'>
+      <span class='tag'>Sidecar</span>
+      <div class='list-caption'>27.02.2025 ❄️🌨️
+The day which turned into a core memory..!!
+With the closest people of mine ♡ ♡
+.
+.
+.
+.
+All captured by this pookie @why.so.craky</div>
+      <div class='list-meta'>
+        <div class='likes-comments'>
+          <span><svg width='16' height='16' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'><path d='M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z' fill='var(--accent1)'/></svg> 70</span>
+          <span><svg width='16' height='16' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'><path d='M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v10z' fill='var(--secondary)'/></svg> 8</span>
+        </div>
+        <span>2025-02-28 04:16</span>
+        <a href='https://instagram.com/blu_es_/' target='_blank'>@blu_es_</a>
+        <a href='https://www.instagram.com/p/DGmk8IfhbuM/' target='_blank'>View on Instagram</a>
+      </div>
+    </div>
+    <div class='list-item'>
+      <span class='tag'>Sidecar</span>
+      <div class='list-caption'>yesterday's dump :P
+pretty in sareee✨✨
+hehe</div>
+      <div class='list-meta'>
+        <div class='likes-comments'>
+          <span><svg width='16' height='16' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'><path d='M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z' fill='var(--accent1)'/></svg> 88</span>
+          <span><svg width='16' height='16' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'><path d='M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v10z' fill='var(--secondary)'/></svg> 24</span>
+        </div>
+        <span>2025-02-03 05:55</span>
+        <a href='https://instagram.com/blu_es_/' target='_blank'>@blu_es_</a>
+        <a href='https://www.instagram.com/p/DFmYUR_hXDP/' target='_blank'>View on Instagram</a>
+      </div>
+    </div>
+    <div class='list-item'>
+      <span class='tag'>Sidecar</span>
+      <div class='list-caption'>When the sun finally shows up 😃👍</div>
+      <div class='list-meta'>
+        <div class='likes-comments'>
+          <span><svg width='16' height='16' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'><path d='M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z' fill='var(--accent1)'/></svg> 74</span>
+          <span><svg width='16' height='16' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'><path d='M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v10z' fill='var(--secondary)'/></svg> 9</span>
+        </div>
+        <span>2024-11-17 10:55</span>
+        <a href='https://instagram.com/blu_es_/' target='_blank'>@blu_es_</a>
+        <a href='https://www.instagram.com/p/DCeEndlyO5l/' target='_blank'>View on Instagram</a>
+      </div>
+    </div>
+    <div class='list-item'>
+      <span class='tag'>Sidecar</span>
+      <div class='list-caption'>Models....are we??
+When the assignment goes ✅</div>
+      <div class='list-meta'>
+        <div class='likes-comments'>
+          <span><svg width='16' height='16' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'><path d='M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z' fill='var(--accent1)'/></svg> 112</span>
+          <span><svg width='16' height='16' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'><path d='M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v10z' fill='var(--secondary)'/></svg> 26</span>
+        </div>
+        <span>2024-10-08 18:32</span>
+        <a href='https://instagram.com/blu_es_/' target='_blank'>@blu_es_</a>
+        <a href='https://www.instagram.com/p/DA35KuhS8-V/' target='_blank'>View on Instagram</a>
+      </div>
+    </div>
+    <div class='list-item'>
+      <span class='tag'>Sidecar</span>
+      <div class='list-caption'>So much happened.......
+Enjoying every bit of it :D</div>
+      <div class='list-meta'>
+        <div class='likes-comments'>
+          <span><svg width='16' height='16' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'><path d='M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z' fill='var(--accent1)'/></svg> 81</span>
+          <span><svg width='16' height='16' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'><path d='M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v10z' fill='var(--secondary)'/></svg> 1</span>
+        </div>
+        <span>2024-09-27 10:24</span>
+        <a href='https://instagram.com/blu_es_/' target='_blank'>@blu_es_</a>
+        <a href='https://www.instagram.com/p/DAasmkbS89O/' target='_blank'>View on Instagram</a>
+      </div>
+    </div>
+    <div class='list-item'>
+      <span class='tag'>Sidecar</span>
+      <div class='list-caption'>जन्माष्टमी का दिन 🌸🦚 !!
+.
+.
+.
+.
+.
+
+Thank youuu sweetie for such amazing pics 🙈 @addy_kini_</div>
+      <div class='list-meta'>
+        <div class='likes-comments'>
+          <span><svg width='16' height='16' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'><path d='M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z' fill='var(--accent1)'/></svg> 73</span>
+          <span><svg width='16' height='16' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'><path d='M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v10z' fill='var(--secondary)'/></svg> 8</span>
+        </div>
+        <span>2024-08-26 17:41</span>
+        <a href='https://instagram.com/blu_es_/' target='_blank'>@blu_es_</a>
+        <a href='https://www.instagram.com/p/C_JFGnEyqo_/' target='_blank'>View on Instagram</a>
+      </div>
+    </div>
+    <div class='list-item'>
+      <span class='tag'>Sidecar</span>
+      <div class='list-caption'>What a Lovely Day Out it was!!! 🎨 🖌️
+Soooö much Fun :D
+(It was burning tho throughout the day ಥ⁠‿⁠ಥ)</div>
+      <div class='list-meta'>
+        <div class='likes-comments'>
+          <span><svg width='16' height='16' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'><path d='M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z' fill='var(--accent1)'/></svg> 76</span>
+          <span><svg width='16' height='16' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'><path d='M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v10z' fill='var(--secondary)'/></svg> 10</span>
+        </div>
+        <span>2024-08-19 18:08</span>
+        <a href='https://instagram.com/blu_es_/' target='_blank'>@blu_es_</a>
+        <a href='https://www.instagram.com/p/C-3GpZ8y_Mm/' target='_blank'>View on Instagram</a>
+      </div>
+    </div>
+    <div class='list-item'>
+      <span class='tag'>Sidecar</span>
+      <div class='list-caption'>Absolutely in love with these Photos 😭🙌
+THE SKY LOOKS SO PERFECT</div>
+      <div class='list-meta'>
+        <div class='likes-comments'>
+          <span><svg width='16' height='16' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'><path d='M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z' fill='var(--accent1)'/></svg> 79</span>
+          <span><svg width='16' height='16' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'><path d='M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v10z' fill='var(--secondary)'/></svg> 22</span>
+        </div>
+        <span>2024-08-07 16:10</span>
+        <a href='https://instagram.com/blu_es_/' target='_blank'>@blu_es_</a>
+        <a href='https://www.instagram.com/p/C-X_r6kS_xL/' target='_blank'>View on Instagram</a>
+      </div>
+    </div>
+    <div class='list-item'>
+      <span class='tag'>Sidecar</span>
+      <div class='list-caption'>Reminiscing good old days in this scorching Heat💔
+.
+.
+.</div>
+      <div class='list-meta'>
+        <div class='likes-comments'>
+          <span><svg width='16' height='16' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'><path d='M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z' fill='var(--accent1)'/></svg> 61</span>
+          <span><svg width='16' height='16' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'><path d='M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v10z' fill='var(--secondary)'/></svg> 4</span>
+        </div>
+        <span>2024-04-27 14:36</span>
+        <a href='https://instagram.com/blu_es_/' target='_blank'>@blu_es_</a>
+        <a href='https://www.instagram.com/p/C6RL1dZSjVO/' target='_blank'>View on Instagram</a>
+      </div>
+    </div>
+    <div class='list-item'>
+      <span class='tag'>Sidecar</span>
+      <div class='list-caption'>Some Sketches over the time 🎨🖌️
+
+╰⁠(⁠⸝⁠⸝⁠⸝⁠´⁠꒳⁠`⁠⸝⁠⸝⁠⸝⁠)⁠╯</div>
+      <div class='list-meta'>
+        <div class='likes-comments'>
+          <span><svg width='16' height='16' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'><path d='M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z' fill='var(--accent1)'/></svg> 65</span>
+          <span><svg width='16' height='16' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'><path d='M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v10z' fill='var(--secondary)'/></svg> 9</span>
+        </div>
+        <span>2024-02-22 06:16</span>
+        <a href='https://instagram.com/blu_es_/' target='_blank'>@blu_es_</a>
+        <a href='https://www.instagram.com/p/C3o69mTSy9Q/' target='_blank'>View on Instagram</a>
+      </div>
+    </div>
+    <div class='list-item'>
+      <span class='tag'>Sidecar</span>
+      <div class='list-caption'>Felt pretty🌸🌷🌱
+.
+.
+.(enough for posting lol) 
+.
+.
+.
+ (⁠ ⁠ꈍ⁠ᴗ⁠ꈍ⁠)</div>
+      <div class='list-meta'>
+        <div class='likes-comments'>
+          <span><svg width='16' height='16' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'><path d='M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z' fill='var(--accent1)'/></svg> 89</span>
+          <span><svg width='16' height='16' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'><path d='M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v10z' fill='var(--secondary)'/></svg> 14</span>
+        </div>
+        <span>2024-02-13 04:16</span>
+        <a href='https://instagram.com/blu_es_/' target='_blank'>@blu_es_</a>
+        <a href='https://www.instagram.com/p/C3RiA1ZS1Rp/' target='_blank'>View on Instagram</a>
+      </div>
+    </div>
+    <div class='list-item'>
+      <span class='tag'>Image</span>
+      <div class='list-caption'>Started doodling with Lamp shade🏮 
+.
+.
+Ended up doing something inspired by studio Ghibli stills 🏞️
+.
+.
+.
+.
+.
+.
+#artwork #ghiblistudio #dailyart</div>
+      <div class='list-meta'>
+        <div class='likes-comments'>
+          <span><svg width='16' height='16' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'><path d='M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z' fill='var(--accent1)'/></svg> 51</span>
+          <span><svg width='16' height='16' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'><path d='M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v10z' fill='var(--secondary)'/></svg> 5</span>
+        </div>
+        <span>2023-08-25 08:59</span>
+        <a href='https://instagram.com/blu_es_/' target='_blank'>@blu_es_</a>
+        <a href='https://www.instagram.com/p/CwXJn3iyJNz/' target='_blank'>View on Instagram</a>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+</body>
+</html>
