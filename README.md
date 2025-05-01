@@ -1,14 +1,15 @@
 # Instagram Scraper
 
-A simple Python script that scrapes Instagram profiles using Apify API and exports data in multiple formats.
+A Python script that scrapes Instagram profiles using the Apify API and exports data in JSON, CSV, and HTML formats.
 
 ## Requirements
 
 - Python 3.6+
 - An Apify account with API token
 - Required packages:
-  - `requests` (required)
-  - `pandas` and `openpyxl` (optional, for Excel export)
+  - `requests`
+  - `json`
+  - `csv`
 
 ## Installation
 
@@ -17,9 +18,6 @@ A simple Python script that scrapes Instagram profiles using Apify API and expor
 
 ```bash
 pip install requests
-
-# Optional dependencies for Excel export
-pip install pandas openpyxl
 ```
 
 ## Usage
@@ -34,36 +32,31 @@ python instagram_scraper.py USERNAME --api-token YOUR_APIFY_TOKEN [--format FORM
 
 - `USERNAME`: Instagram username to scrape
 - `--api-token`: Your Apify API token
-- `--format`: Optional comma-separated list of output formats (default: json)
+- `--format`: Optional comma-separated list of output formats (default: json,csv,html)
 
 ### Available Formats
 
 The `--format` parameter accepts the following values:
 
-- `json`: Standard JSON format (default)
-- `jsonl`: JSON Lines format (one object per line)
-- `csv`: Comma-separated values
-- `xml`: XML format
-- `excel`: Excel spreadsheet (requires pandas and openpyxl)
-- `html`: HTML table
-- `rss`: RSS feed
-- `all`: Export to all available formats
+- `json`: Standard JSON format with all data
+- `csv`: Comma-separated values with main post fields
+- `html`: Interactive HTML page with table and list views
 
 ### Examples
 
-Export to JSON (default):
+Export to all formats (default):
 ```bash
-python instagram_scraper.py natgeo --api-token apify_api_xxxxxxxxxxxxxxxxxxxx
+python instagram_scraper.py nasa --api-token apify_api_xxxxxxxxxxxxxxxxxxxx
 ```
 
-Export to CSV and Excel:
+Export to JSON only:
 ```bash
-python instagram_scraper.py natgeo --api-token apify_api_xxxxxxxxxxxxxxxxxxxx --format csv,excel
+python instagram_scraper.py nasa --api-token apify_api_xxxxxxxxxxxxxxxxxxxx --format json
 ```
 
-Export to all available formats:
+Export to CSV and HTML:
 ```bash
-python instagram_scraper.py natgeo --api-token apify_api_xxxxxxxxxxxxxxxxxxxx --format all
+python instagram_scraper.py nasa --api-token apify_api_xxxxxxxxxxxxxxxxxxxx --format csv,html
 ```
 
 ## Output
@@ -75,21 +68,39 @@ The script will:
 
 The data is saved to: `instagram_data/USERNAME_TIMESTAMP/USERNAME.FORMAT`
 
+### HTML Report Features
+
+The HTML report includes:
+- Dark mode design
+- Tab-based navigation between table and list views
+- Summary statistics (posts count, total likes, total comments)
+- Search functionality for posts
+- Responsive design for mobile and desktop
+- Interactive elements with hover effects
+
 ## How It Works
 
-This scraper uses Apify's "shu8hvrXbJbY3Eb9W" actor, which is a reliable Instagram scraper. It's configured to use the "directUrls" approach, which has proven to be the most effective method for retrieving Instagram profile data.
+This scraper uses Apify's "shu8hvrXbJbY3Eb9W" actor, which is a reliable Instagram scraper. It's configured to use the "directUrls" approach with a limit of 100 posts per profile.
 
 ## Data Structure
 
 The exported data contains the following information for each Instagram post:
 - Post ID and shortcode
 - Post type (image, video, etc.)
-- Caption and description
+- Caption
 - Number of likes and comments
 - Timestamp
 - Owner username
 - URL
-- And more depending on what the API returns
+
+### JSON Format
+Contains the complete data structure with all fields as returned by the API.
+
+### CSV Format
+Contains a flattened version with the most important fields in tabular format.
+
+### HTML Format
+An interactive web page that allows browsing, filtering, and searching the data.
 
 ## Troubleshooting
 
@@ -97,7 +108,7 @@ If you encounter errors:
 1. Check your Apify API token is valid
 2. Verify the Instagram username exists and is public
 3. Ensure you have an active internet connection
-4. For Excel export issues, make sure pandas and openpyxl are installed
+4. Check the script output for specific error messages
 
 ## Note
 
