@@ -4,17 +4,8 @@ import os
 import time
 import argparse
 import csv
-import xml.dom.minidom
-import xml.etree.ElementTree as ET
 from datetime import datetime
 import re
-
-# Try importing optional dependencies
-try:
-    import pandas as pd
-    PANDAS_AVAILABLE = True
-except ImportError:
-    PANDAS_AVAILABLE = False
 
 def safe_get(obj, key, default=''):
     """Safely gets a value from a dictionary, handling nested keys and returning a default if not found."""
@@ -116,7 +107,7 @@ def create_output_folder(username):
     return folder_path
 
 def save_data(data, folder_path, filename="instagram_data", formats=None):
-    """Save data to multiple file formats."""
+    """Save data to JSON, CSV, and HTML formats."""
     if formats is None:
         formats = ["json", "csv", "html"]  # Default formats
     
@@ -138,8 +129,11 @@ def save_data(data, folder_path, filename="instagram_data", formats=None):
         # Flatten the data for CSV (extract common fields)
         flattened_data = []
         for item in data:
+            if not isinstance(item, dict):
+                continue
+                
             flat_item = {}
-            # Extract common fields - adjust these based on your data structure
+            # Extract common fields
             flat_item["id"] = item.get("id", "")
             flat_item["type"] = item.get("type", "")
             flat_item["shortCode"] = item.get("shortCode", "")
@@ -150,7 +144,6 @@ def save_data(data, folder_path, filename="instagram_data", formats=None):
             flat_item["ownerUsername"] = item.get("ownerUsername", "")
             flat_item["url"] = item.get("url", "")
             
-            # Add any additional fields here
             flattened_data.append(flat_item)
         
         # Write to CSV
@@ -163,13 +156,19 @@ def save_data(data, folder_path, filename="instagram_data", formats=None):
             print(f"✅ Saved CSV data to {csv_path}")
             results["csv"] = csv_path
     
-    # Save as HTML Table with dark mode
+    # Save as HTML
     if "html" in formats:
         try:
             html_path = os.path.join(folder_path, f"{filename}.html")
             print(f"Starting HTML generation to {html_path}...")
             
-            # Create HTML content with dark theme and requested colors
+            # Prepare data for HTML
+            total_likes = sum(item.get('likesCount', 0) for item in data 
+                             if isinstance(item, dict) and isinstance(item.get('likesCount', 0), (int, float)))
+            total_comments = sum(item.get('commentsCount', 0) for item in data 
+                                if isinstance(item, dict) and isinstance(item.get('commentsCount', 0), (int, float)))
+            
+            # Create HTML content with dark theme
             html = [
                 "<!DOCTYPE html>",
                 "<html>",
@@ -177,8 +176,6 @@ def save_data(data, folder_path, filename="instagram_data", formats=None):
                 "<meta charset='UTF-8'>",
                 f"<title>Instagram Data for @{filename}</title>",
                 "<style>",
-                "/* Dark theme with specified color palette */",
-                "/* Colors: #9d4edd, #c77dff, #ff9e00, #ddff00, #9d4edd */",
                 ":root {",
                 "  --bg-color: #111420;",
                 "  --card-bg: #1e2132;",
@@ -227,12 +224,6 @@ def save_data(data, folder_path, filename="instagram_data", formats=None):
                 ".likes-comments { display: flex; gap: 15px; }",
                 ".likes-comments span { display: flex; align-items: center; }",
                 ".likes-comments span svg { margin-right: 5px; }",
-                "/* Scrollbar styling */",
-                "::-webkit-scrollbar { width: 10px; height: 10px; }",
-                "::-webkit-scrollbar-track { background: var(--card-bg); }",
-                "::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 5px; }",
-                "::-webkit-scrollbar-thumb:hover { background: var(--secondary); }",
-                "/* Responsive adjustments */",
                 "@media (max-width: 768px) {",
                 "  .container { margin: 10px; padding: 15px; }",
                 "  .stats { flex-direction: column; }",
@@ -252,7 +243,6 @@ def save_data(data, folder_path, filename="instagram_data", formats=None):
                 "  }",
                 "  document.getElementById(tabName).style.display = 'block';",
                 "  evt.currentTarget.className += ' active';",
-                "  // Save the active tab to localStorage",
                 "  localStorage.setItem('activeInstagramTab', tabName);",
                 "}",
                 "",
@@ -290,9 +280,7 @@ def save_data(data, folder_path, filename="instagram_data", formats=None):
                 "}",
                 "",
                 "window.onload = function() {",
-                "  // Check if there's a saved tab preference",
                 "  const activeTab = localStorage.getItem('activeInstagramTab') || 'table-view';",
-                "  // Find the tab button for the saved tab and click it",
                 "  const tabs = document.getElementsByClassName('tab');",
                 "  for (let i = 0; i < tabs.length; i++) {",
                 "    if (tabs[i].getAttribute('data-tab') === activeTab) {",
@@ -300,7 +288,6 @@ def save_data(data, folder_path, filename="instagram_data", formats=None):
                 "      break;",
                 "    }",
                 "  }",
-                "  // If no matching tab found, click the first one",
                 "  if (!document.querySelector('.tab.active')) {",
                 "    document.querySelector('.tab').click();",
                 "  }",
@@ -314,8 +301,8 @@ def save_data(data, folder_path, filename="instagram_data", formats=None):
                 "<!-- Statistics -->",
                 "<div class='stats'>",
                 f"  <div class='stat-block'><div class='stat-value'>{len(data)}</div><div class='stat-label'>Posts</div></div>",
-                f"  <div class='stat-block'><div class='stat-value'>{sum(item.get('likesCount', 0) for item in data if isinstance(item.get('likesCount', 0), (int, float))):,}</div><div class='stat-label'>Total Likes</div></div>",
-                f"  <div class='stat-block'><div class='stat-value'>{sum(item.get('commentsCount', 0) for item in data if isinstance(item.get('commentsCount', 0), (int, float))):,}</div><div class='stat-label'>Total Comments</div></div>",
+                f"  <div class='stat-block'><div class='stat-value'>{total_likes:,}</div><div class='stat-label'>Total Likes</div></div>",
+                f"  <div class='stat-block'><div class='stat-value'>{total_comments:,}</div><div class='stat-label'>Total Comments</div></div>",
                 "</div>",
                 "",
                 "<!-- Tabs -->",
@@ -389,19 +376,16 @@ def save_data(data, folder_path, filename="instagram_data", formats=None):
             html.append("  </div>")
             html.append("</div>")
             
-            # List View
+            # List View - more efficient version
             html.append("<div id='list-view' class='tab-content'>")
             html.append("  <div class='search-container'>")
             html.append("    <input type='text' id='list-search' onkeyup=\"searchList()\" placeholder='Search posts...'>")
             html.append("  </div>")
             html.append("  <div class='list-view'>")
             
-            # Sort by date
-            sorted_items = sorted(
-                [item for item in data if isinstance(item, dict)],
-                key=lambda x: x.get('timestamp', ''),
-                reverse=True
-            )
+            # Filter and sort items more efficiently
+            valid_items = [item for item in data if isinstance(item, dict)]
+            sorted_items = sorted(valid_items, key=lambda x: x.get('timestamp', ''), reverse=True)
             
             # Add list items
             for item in sorted_items:
@@ -448,26 +432,13 @@ def save_data(data, folder_path, filename="instagram_data", formats=None):
             html.append("</html>")
             
             # Write HTML to file
-            print(f"HTML generation complete. Writing {len(html)} lines to file...")
-            try:
-                with open(html_path, 'w', encoding='utf-8') as f:
-                    f.write("\n".join(html))
-                print(f"✅ Saved HTML Table to {html_path}")
-                # Check file exists and has content
-                if os.path.exists(html_path):
-                    file_size = os.path.getsize(html_path)
-                    print(f"  ✓ HTML file created successfully: {html_path} ({file_size} bytes)")
-                else:
-                    print(f"  ✗ HTML file not found after writing: {html_path}")
-                results["html"] = html_path
-            except Exception as write_error:
-                print(f"❌ Failed to write HTML file: {str(write_error)}")
-                import traceback
-                traceback.print_exc()
+            with open(html_path, 'w', encoding='utf-8') as f:
+                f.write("\n".join(html))
+            print(f"✅ Saved HTML Table to {html_path}")
+            results["html"] = html_path
+            
         except Exception as e:
             print(f"❌ Failed to generate HTML: {str(e)}")
-            import traceback
-            traceback.print_exc()
     
     return results
 
@@ -475,7 +446,7 @@ def main():
     parser = argparse.ArgumentParser(description="Instagram Scraper using Apify")
     parser.add_argument("username", help="Instagram username to scrape")
     parser.add_argument("--api-token", required=True, help="Your Apify API token")
-    parser.add_argument("--format", default="html,json,csv", help="Output format(s), comma-separated: html,json,csv")
+    parser.add_argument("--format", default="json,csv,html", help="Output format(s), comma-separated: json,csv,html")
     args = parser.parse_args()
     
     username = args.username
@@ -504,11 +475,6 @@ def main():
         print("\n📁 Saved in the following formats:")
         for fmt, path in saved_files.items():
             print(f"  - {fmt.upper()}: {os.path.basename(path)}")
-            # Verify file exists
-            if os.path.exists(path):
-                print(f"    ✓ File exists: {path} ({os.path.getsize(path)} bytes)")
-            else:
-                print(f"    ✗ File does not exist: {path}")
     else:
         print(f"\n❌ Failed to retrieve any Instagram data for {username}")
 
